@@ -52,12 +52,14 @@
     const scriptUrl = 'https://script.google.com/macros/s/AKfycby6W2UICGqD34SIIpWHMxV3jkMchQjCDcrBfoLD_N6ujhCd0QJPP68454pKHxHb0OJUcQ/exec'; // Вставьте сюда URL Google Apps Script
 
 function sendAction(action) {
-  const scriptUrl = 'https://script.google.com/macros/s/ВАШ_АКТУАЛЬНЫЙ_URL/exec';
-  fetch(`${scriptUrl}?action=${action}`, {
-    method: 'GET',
+  const scriptUrl = 'https://script.google.com/macros/s/АКТУАЛЬНЫЙ_URL/exec'; // Замените на ваш URL
+  fetch(scriptUrl, {
+    method: 'POST',
+    body: JSON.stringify({ action: action }),
+    headers: { 'Content-Type': 'application/json' },
   })
     .then((response) => response.text())
-    .then((text) => console.log('Успешный ответ:', text))
+    .then((text) => console.log(text))
     .catch((error) => console.error('Ошибка:', error));
 }
 
