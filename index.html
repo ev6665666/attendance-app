@@ -23,11 +23,6 @@
             color: white;
         }
 
-        #timestamp {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
         #timer {
             font-size: 24px;
         }
@@ -36,13 +31,11 @@
 <body>
     <button id="cameButton" class="button greenButton">Я пришел</button>
     <button id="leftButton" class="button redButton">Я ушел</button>
-    <div id="timestamp"></div>
     <div id="timer"></div>
 
     <script>
         const cameButton = document.getElementById('cameButton');
         const leftButton = document.getElementById('leftButton');
-        const timestampDiv = document.getElementById('timestamp');
         const timerDiv = document.getElementById('timer');
 
         function handleButtonClick(buttonId) {
@@ -50,8 +43,7 @@
             buttons.forEach(button => button.disabled = true);
 
             const currentDate = new Date();
-            timestampDiv.textContent = `Вы нажали кнопку в ${currentDate.toLocaleString()}`;
-            timerDiv.textContent = `Осталось ${seconds} секунд`;
+            timerDiv.textContent = `Вы нажали кнопку в ${currentDate.toLocaleString()}`;
 
             let seconds = 30;
             const timerInterval = setInterval(() => {
