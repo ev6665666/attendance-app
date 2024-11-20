@@ -1,64 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Моя страница с кнопками и таймером</title>
-    <style>
-        .button {
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
-        .greenButton {
-            background-color: #4CAF50; /* Зеленый */
-            color: white;
-        }
-
-        .redButton {
-            background-color: #f44336; /* Красный */
-            color: white;
-        }
-
-        #timer {
-            font-size: 24px;
-        }
-    </style>
+    <title>Журнал посещаемости</title>
 </head>
 <body>
-    <button id="cameButton" class="button greenButton">Я пришел</button>
-    <button id="leftButton" class="button redButton">Я ушел</button>
-    <div id="timer"></div>
+    <button id="cameButton">Я пришел</button>
+    <button id="leftButton">Я ушел</button>
 
     <script>
         const cameButton = document.getElementById('cameButton');
         const leftButton = document.getElementById('leftButton');
-        const timerDiv = document.getElementById('timer');
 
         function handleButtonClick(buttonId) {
-            const buttons = [cameButton, leftButton];
-            buttons.forEach(button => button.disabled = true);
-
             const currentDate = new Date();
-            timerDiv.textContent = `Вы нажали кнопку в ${currentDate.toLocaleString()}`;
+            const timestamp = currentDate.toISOString();
 
-            let seconds = 30;
-            const timerInterval = setInterval(() => {
-                seconds--;
-                timerDiv.textContent = `Осталось ${seconds} секунд`;
-                if (seconds === 0) {
-                    clearInterval(timerInterval);
-                    buttons.forEach(button => button.disabled = false);
-                    timerDiv.textContent = '';
-                }
-            }, 1000);
+            // Запрос на отправку данных в Google Таблицу
+            fetch('https://script.google.com/macros/s/AKfycby7xcfpf3FbAwk6oD9kowqo9n1Qy10lk7O0XxL_atNPfus_Q0nsDj-rnzq7cLPXSU6Ylg/exec', {
+                method: 'post',
+                payload: JSON.stringify({
+                    timestamp: timestamp,
+                    button: buttonId
+                })
+            })
+            .then(response => response.text())
+            .then(data => console.log(data))
+            .catch(error => console.error('Error:', error));
         }
 
-        cameButton.addEventListener('click', () => handleButtonClick('came'));
-        leftButton.addEventListener('click', () => handleButtonClick('left'));
+        cameButton.addEventListener('click', () => handleButtonClick('пришел'));
+        leftButton.addEventListener('click', () => handleButtonClick('ушел'));
     </script>
 </body>
 </html>
