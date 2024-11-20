@@ -1,71 +1,64 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Посещаемость</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-    }
-    .container {
-      text-align: center;
-    }
-    button {
-      display: block;
-      width: 200px;
-      padding: 15px;
-      margin: 10px auto;
-      font-size: 18px;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .green {
-      background-color: #28a745;
-    }
-    .red {
-      background-color: #dc3545;
-    }
-    button:disabled {
-      background-color: #aaa;
-      cursor: not-allowed;
-    }
-  </style>
+    <title>Моя страница с кнопками и таймером</title>
+    <style>
+        .button {
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .greenButton {
+            background-color: #4CAF50; /* Зеленый */
+            color: white;
+        }
+
+        .redButton {
+            background-color: #f44336; /* Красный */
+            color: white;
+        }
+
+        #timer {
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <button id="arrived" class="green">Я пришел</button>
-    <button id="left" class="red">Я ушел</button>
-  </div>
+    <button id="cameButton" class="button greenButton">Я пришел</button>
+    <button id="leftButton" class="button redButton">Я ушел</button>
+    <div id="timer"></div>
 
-  <script>
-    const arrivedButton = document.getElementById('arrived');
-    const leftButton = document.getElementById('left');
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycby6W2UICGqD34SIIpWHMxV3jkMchQjCDcrBfoLD_N6ujhCd0QJPP68454pKHxHb0OJUcQ/exec'; // Вставьте сюда URL Google Apps Script
+    <script>
+        const cameButton = document.getElementById('cameButton');
+        const leftButton = document.getElementById('leftButton');
+        const timerDiv = document.getElementById('timer');
 
-function sendAction(action) {
-  const scriptUrl = 'https://script.google.com/macros/s/АКТУАЛЬНЫЙ_URL/exec'; // Замените на ваш URL
-  fetch(scriptUrl, {
-    method: 'POST',
-    body: JSON.stringify({ action: action }),
-    headers: { 'Content-Type': 'application/json' },
-  })
-    .then((response) => response.text())
-    .then((text) => console.log(text))
-    .catch((error) => console.error('Ошибка:', error));
-}
+        function handleButtonClick(buttonId) {
+            const buttons = [cameButton, leftButton];
+            buttons.forEach(button => button.disabled = true);
 
+            const currentDate = new Date();
+            timerDiv.textContent = `Вы нажали кнопку в ${currentDate.toLocaleString()}`;
 
-    arrivedButton.addEventListener('click', () => sendAction('Я пришел'));
-    leftButton.addEventListener('click', () => sendAction('Я ушел'));
-  </script>
+            let seconds = 30;
+            const timerInterval = setInterval(() => {
+                seconds--;
+                timerDiv.textContent = `Осталось ${seconds} секунд`;
+                if (seconds === 0) {
+                    clearInterval(timerInterval);
+                    buttons.forEach(button => button.disabled = false);
+                    timerDiv.textContent = '';
+                }
+            }, 1000);
+        }
+
+        cameButton.addEventListener('click', () => handleButtonClick('came'));
+        leftButton.addEventListener('click', () => handleButtonClick('left'));
+    </script>
 </body>
 </html>
